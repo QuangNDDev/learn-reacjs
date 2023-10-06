@@ -1,12 +1,25 @@
 // import "./App.css";
 
-import { NavLink, Route, Routes } from "react-router-dom";
-import TodoFeature from "./feature/Todo/index";
-import ListPage from "./feature/Todo/pages/ListPage";
-import DetailPage from "./feature/Todo/pages/Detailpage";
-import NotFound from "./components/NotFound";
+import { NavLink, Route, Routes } from 'react-router-dom';
+import TodoFeature from './feature/Todo/index';
+import ListPage from './feature/Todo/pages/ListPage';
+import DetailPage from './feature/Todo/pages/Detailpage';
+import NotFound from './components/NotFound';
+import { useEffect } from 'react';
+import productApi from './api/productApi';
 
 function App() {
+  useEffect(() => {
+    //muon lay 10 category
+    const params = {
+      _limit: 10,
+    };
+    const fetchProducts = async () => {
+      const productList = await productApi.getAll(params);
+      console.log(productList);
+    };
+    fetchProducts();
+  }, []);
   return (
     <div className="App">
       Home Page
