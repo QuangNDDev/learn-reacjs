@@ -1,66 +1,23 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
-import TodoList from "./components/TodoList";
+import React from "react";
+import { Route, Routes, matchPath, useMatch } from "react-router-dom";
+import DetailPage from "./pages/Detailpage";
+import ListPage from "./pages/ListPage";
+import NotFound from "../../components/NotFound";
 
 TodoFeature.propTypes = {};
 
 function TodoFeature(props) {
-  const inittodoList = [
-    {
-      id: 1,
-      title: "Eat",
-      status: "new",
-    },
-    {
-      id: 2,
-      title: "Sleep",
-      status: "completed",
-    },
-    {
-      id: 3,
-      title: "Code",
-      status: "new",
-    },
-  ];
-  const [todoList, setTodoList] = useState(inittodoList);
-  const [filteredStatus, setFilteredStatus] = useState("all");
-  const handleTodoClick = (todo, idx) => {
-    //Khi làm việc với object và array thì mình phải clone nó ra một mảng mới
-    const newTodoList = [...todoList];
-    console.log(todo, idx);
-    //Chuyển đổi cái state
-    newTodoList[idx] = {
-      ...newTodoList[idx],
-      status: newTodoList[idx].status === "new" ? "completed" : "new",
-    };
-
-    //Cập nhật cái TodoList
-    setTodoList(newTodoList);
-  };
-
-  const handleShowAllClick = () => {
-    setFilteredStatus("all");
-  };
-
-  const handleShowCompletedClick = () => {
-    setFilteredStatus("completed");
-  };
-
-  const handleShowNewClick = () => {
-    setFilteredStatus("new");
-  };
-  const renderedTodoList = todoList.filter(
-    (todo) => filteredStatus === "all" || filteredStatus === todo.status
-  );
+  //trong react-router-doom v6 khong co component Todofeature van chay duoc
+  const match = useMatch();
   return (
     <div>
-      <h3>Todo List</h3>
-      <TodoList todoList={renderedTodoList} onTodoClick={handleTodoClick} />
-      <div>
-        <button onClick={handleShowAllClick}>Show All</button>
-        <button onClick={handleShowCompletedClick}>Show Completed</button>
-        <button onClick={handleShowNewClick}>Show New</button>
-      </div>
+      <Routes>
+        {/* lay patch cua thang cha ben app.js truyen vao math.patch
+        co nghia la thang cha ben app.js xai cai path nao thi no se lay cai path do */}
+        <Route path={match.path} element={ListPage} exact />
+        <Route path={`${match.path}/:todoid`} element={DetailPage} exact />
+        <Route path="*" element={NotFound} exact />
+      </Routes>
     </div>
   );
 }
